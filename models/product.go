@@ -14,32 +14,33 @@ type Product struct {
 	Url string
 	TargetPrice string
 	CreateDate time.Time
-	status string
+	Status string
+	Website string
 }
 
-func (p Product) FindByStatus(status string) (*[]Product, error) {
+func (p Product) FindByStatus(status string) ([]*Product, error) {
 	if status == "" {
 		return nil, errors.New("Please provide a status")
 	}
 
-	sql := fmt.Sprintf("select `id`, `name`, `url`, `target_price`, `create_date`, `status` from %s where `status`=?", ProductTable)
+	sql := fmt.Sprintf("select `id`, `name`, `url`, `target_price`, `create_date`, `status`, `website` from %s where `status`=?", ProductTable)
 	rows, err := db.Query(sql, status)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var products []Product
+	var products []*Product
 	for rows.Next() {
 		p := new(Product)
-		err := rows.Scan(&p.Id, &p.Name, &p.Url, &p.TargetPrice, &p.CreateDate, &p.status)
+		err := rows.Scan(&p.Id, &p.Name, &p.Url, &p.TargetPrice, &p.CreateDate, &p.Status, &p.Website)
 		if err != nil {
 			return nil, err
 		}
-		products = append(products, *p)
+		products = append(products, p)
 	}
 
-	return &products, nil
+	return products, nil
 }
 
 func (p Product) Save() (*Product, error) {
@@ -47,12 +48,12 @@ func (p Product) Save() (*Product, error) {
 	if p.Id == 0 {
 		p.CreateDate = time.Now()
 		p.CreateDate.Format(time.RFC3339)
-		sql = fmt.Sprintf("INSERT INTO %s (`name`, `url`, `target_price`, `create_date`, `status` VALUES (?,?,?,?,?)", ProductTable)
+		sql = fmt.Sprintf("INSERT INTO %s (`name`, `url`, `target_price`, `create_date`, `status`, `website` VALUES (?,?,?,?,?,?)", ProductTable)
 	} else {
-		sql = fmt.Sprintf("UPDATE %s SET `name`=?, `url`=?, `target_price`=?, `create_date`=?, `status`=? WHERE `id`=%d", ProductTable, p.Id)
+		sql = fmt.Sprintf("UPDATE %s SET `name`=?, `url`=?, `target_price`=?, `create_date`=?, `status`=?, `website`=? WHERE `id`=%d", ProductTable, p.Id)
 	}
 
-	res, err := db.Exec(sql, p.Name, p.Url, p.TargetPrice, p.CreateDate, p.status)
+	res, err := db.Exec(sql, p.Name, p.Url, p.TargetPrice, p.CreateDate, p.Status, p.Website)
 	if err != nil {
 		return nil, err
 	}

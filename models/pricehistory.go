@@ -2,8 +2,8 @@ package models
 
 import (
 	"fmt"
-	"time"
 	"github.com/kataras/go-errors"
+	"time"
 )
 
 const PriceHistoryTable = "price_history"
@@ -12,6 +12,7 @@ type PriceHistory struct {
 	Id int64
 	ProductId int64
 	Price string
+	AlternatePrice string
 	Seller string
 	CreateDate time.Time
 }
@@ -21,12 +22,12 @@ func (p PriceHistory) Save() (*PriceHistory, error) {
 	if p.Id == 0 {
 		p.CreateDate = time.Now()
 		p.CreateDate.Format(time.RFC3339)
-		sql = fmt.Sprintf("INSERT INTO %s (`product_id`, `price`, `seller`) VALUES (?,?,?)", PriceHistoryTable)
+		sql = fmt.Sprintf("INSERT INTO %s (`product_id`, `price`, `alternate_price`, `seller`) VALUES (?,?,?,?)", PriceHistoryTable)
 	} else {
-		sql = fmt.Sprintf("UPDATE %s SET `product_id`=?, `price`=?, `seller`=?, `create_date`=? WHERE `id`=%d", PriceHistoryTable, p.Id)
+		sql = fmt.Sprintf("UPDATE %s SET `product_id`=?, `price`=?, `alternate_price`=?, `seller`=?, `create_date`=? WHERE `id`=%d", PriceHistoryTable, p.Id)
 	}
 
-	res, err := db.Exec(sql, p.ProductId, p.Price, p.Seller, p.CreateDate)
+	res, err := db.Exec(sql, p.ProductId, p.Price, p.AlternatePrice, p.Seller, p.CreateDate)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +47,7 @@ func (p PriceHistory) FindByProductId(id int64) (*[]PriceHistory, error) {
 		return nil, errors.New("Please provide an id")
 	}
 
-	sql := fmt.Sprintf("select `id`, `product_id`, `price`, `seller`, `create_date` from %s where `product_id`=?", ProductTable)
+	sql := fmt.Sprintf("select `id`, `product_id`, `price`, `alternate_price`, `seller`, `create_date` from %s where `product_id`=?", ProductTable)
 	rows, err := db.Query(sql, id)
 	if err != nil {
 		return nil, err
@@ -56,7 +57,7 @@ func (p PriceHistory) FindByProductId(id int64) (*[]PriceHistory, error) {
 	var priceHistories []PriceHistory
 	for rows.Next() {
 		p := new(PriceHistory)
-		err := rows.Scan(&p.Id, &p.ProductId, &p.Price, &p.Seller, &p.CreateDate)
+		err := rows.Scan(&p.Id, &p.ProductId, &p.Price, &p.AlternatePrice, &p.Seller, &p.CreateDate)
 		if err != nil {
 			return nil, err
 		}
