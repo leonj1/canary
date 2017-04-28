@@ -30,7 +30,7 @@ func main() {
 		switch website := product.Website; website {
 		case "amazon":
 			a := new(services.Amazon)
-			currentPrice := a.fetch(product.Website)
+			currentPrice, err := a.Fetch(product.Website)
 			if err != nil {
 				panic(err.Error())
 			}

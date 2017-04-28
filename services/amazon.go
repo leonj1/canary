@@ -11,7 +11,7 @@ type Amazon struct {
 }
 
 // Website specific implementation on how to parse it's product page
-func (a Amazon) fetch(url string) (models.CurrentPrice, error) {
+func (a Amazon) Fetch(url string) (models.CurrentPrice, error) {
 	if url == "" {
 		return nil, errors.New("Please provide a url to fetch")
 	}
