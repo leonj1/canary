@@ -44,8 +44,8 @@ func main() {
 	for _, product := range products {
 		switch website := product.Website; website {
 		case "amazon":
-			a := new(services.Amazon)
-			currentPrice, err := a.Fetch(product.Website)
+			a := services.Amazon{Name: product.Name}
+			currentPrice, err := a.Fetch(product.Url)
 			if err != nil {
 				panic(err.Error())
 			}
