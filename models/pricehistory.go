@@ -22,7 +22,7 @@ func (p PriceHistory) Save() (*PriceHistory, error) {
 	if p.Id == 0 {
 		p.CreateDate = time.Now()
 		p.CreateDate.Format(time.RFC3339)
-		sql = fmt.Sprintf("INSERT INTO %s (`product_id`, `price`, `alternate_price`, `seller`) VALUES (?,?,?,?)", PriceHistoryTable)
+		sql = fmt.Sprintf("INSERT INTO %s (`product_id`, `price`, `alternate_price`, `seller`, `create_date`) VALUES (?,?,?,?,?)", PriceHistoryTable)
 	} else {
 		sql = fmt.Sprintf("UPDATE %s SET `product_id`=?, `price`=?, `alternate_price`=?, `seller`=?, `create_date`=? WHERE `id`=%d", PriceHistoryTable, p.Id)
 	}

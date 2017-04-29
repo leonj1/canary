@@ -1,6 +1,6 @@
 create database `canary`;
 
-create table `product` (
+create table `products` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(256) NOT NULL,
   `url` VARCHAR(1024) NOT NULL,
@@ -14,6 +14,7 @@ create table `price_history` (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `product_id` INT NOT NULL,
   `price` NUMERIC(15,2) NOT NULL,
+  `alternate_price` NUMERIC(15,2) NOT NULL,
   `seller` VARCHAR(256) NOT NULL,
   `create_date` TIMESTAMP NOT NULL
 );
