@@ -10,6 +10,7 @@ import (
 	"github.com/husobee/vestigo"
 	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -31,9 +32,15 @@ func main() {
 	router.Get("/products", routes.GetProducts)
 	router.Get("/pricehistory", routes.GetPriceHistory)
 
-	go services.FetchPrices()
+	// Fetch prices in a background thread
+	s := func() {
+		for {
+			services.FetchPrices()
+			time.Sleep(time.Second * 2)
+		}
+	}
+	go s()
 
 	log.Println("Starting web server")
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", *serverPort), router))
-
 }
