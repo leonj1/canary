@@ -47,7 +47,7 @@ func (p PriceHistory) FindByProductId(id int64) (*[]PriceHistory, error) {
 		return nil, errors.New("Please provide an id")
 	}
 
-	sql := fmt.Sprintf("select `id`, `product_id`, `price`, `alternate_price`, `seller`, `create_date` from %s where `product_id`=?", ProductTable)
+	sql := fmt.Sprintf("select `id`, `product_id`, `price`, `alternate_price`, `seller`, `create_date` from %s where `product_id`=?", PriceHistoryTable)
 	rows, err := db.Query(sql, id)
 	if err != nil {
 		return nil, err

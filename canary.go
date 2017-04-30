@@ -30,7 +30,7 @@ func main() {
 
 	router.Post("/products", routes.AddProduct)
 	router.Get("/products", routes.GetProducts)
-	router.Get("/pricehistory", routes.GetPriceHistory)
+	router.Get("/pricehistory/:id", routes.GetPriceHistory)
 
 	// Fetch prices in a background thread
 	s := func() {
