@@ -36,7 +36,7 @@ func main() {
 	s := func() {
 		for {
 			services.FetchPrices()
-			time.Sleep(time.Second * 2)
+			time.Sleep(time.Hour * 1)
 		}
 	}
 	go s()
