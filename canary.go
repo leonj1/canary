@@ -2,24 +2,15 @@ package main
 
 import (
 	"canary/models"
+	"canary/routes"
 	"canary/services"
 	"flag"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/husobee/vestigo"
 	"log"
-	"strconv"
+	"net/http"
 )
-
-func sendAlert(products []models.ProductOnSale) {
-	log.Printf("%d number of sales found", len(products))
-}
-
-func min(a, b float64) (float64) {
-	if a < b {
-		return a
-	}
-	return b
-}
 
 func main() {
 
@@ -27,64 +18,22 @@ func main() {
 	var userName = flag.String("user", "", "db username")
 	var password = flag.String("pass", "", "db password")
 	var databaseName = flag.String("db", "", "db name")
+	var serverPort = flag.String("port", "", "server port")
 	flag.Parse()
 
 	// open connection to db
 	connectionString := fmt.Sprintf("%s:%s@/%s?parseTime=true", *userName, *password, *databaseName)
 	models.InitDB(connectionString)
 
-	var p models.Product
-	products, err := p.FindByStatus("ACTIVE")
-	if err != nil {
-		panic(err.Error())
-	}
+	router := vestigo.NewRouter()
 
-	var sales []models.ProductOnSale
+	router.Post("/products", routes.AddProduct)
+	router.Get("/products", routes.GetProducts)
+	router.Get("/pricehistory", routes.GetPriceHistory)
 
-	for _, product := range products {
-		switch website := product.Website; website {
-		case "amazon":
-			a := services.Amazon{Name: product.Name}
-			currentPrice, err := a.Fetch(product.Url)
-			if err != nil {
-				panic(err.Error())
-			}
+	go services.FetchPrices()
 
-			priceHistory := new(models.PriceHistory)
-			priceHistory.ProductId = product.Id
-			priceHistory.Price = currentPrice.Price
-			priceHistory.AlternatePrice = currentPrice.AlternatePrice
+	log.Println("Starting web server")
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", *serverPort), router))
 
-			ph, err := priceHistory.Save()
-			if err != nil {
-				panic(err.Error())
-			}
-
-			targetPrice, err := strconv.ParseFloat(product.TargetPrice, 64)
-			if err != nil {
-				panic(err.Error())
-			}
-
-			currentPriceInt, err := strconv.ParseFloat(ph.Price, 64)
-			if err != nil {
-				panic(err.Error())
-			}
-			alternatePriceInt, err := strconv.ParseFloat(ph.AlternatePrice, 64)
-			if err != nil {
-				panic(err.Error())
-			}
-
-			if currentPriceInt < targetPrice || alternatePriceInt < targetPrice {
-				sales = append(sales, models.ProductOnSale{
-					Name: product.Name,
-					Url: product.Url,
-					Price: fmt.Sprintf("%.6f", min(currentPriceInt, alternatePriceInt)),
-				})
-			}
-		}
-	}
-
-	if len(sales) > 0 {
-		sendAlert(sales)
-	}
 }
