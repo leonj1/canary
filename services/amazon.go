@@ -34,7 +34,10 @@ func (a Amazon) Fetch(url string) (*models.CurrentPrice, error) {
 	// Get the current Price
 	startingPoint, ok := Find(root, ById("priceblock_ourprice"))
 	if !ok {
-		return nil, errors.New(fmt.Sprintf("Unable to find current Amazon price for %s", a.Name))
+		startingPoint, ok = Find(root, ById("priceblock_saleprice"))
+		if !ok {
+			return nil, errors.New(fmt.Sprintf("Unable to find current Amazon price for %s", a.Name))
+		}
 	}
 
 	price := Text(startingPoint)
