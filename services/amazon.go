@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/kataras/go-errors"
 	"golang.org/x/net/html"
+	"log"
 	"net/http"
 )
 
@@ -63,10 +64,10 @@ func (a Amazon) Fetch(url string) (*models.CurrentPrice, error) {
 	// Sample result
 	p := models.CurrentPrice{
 		Price: price,
-		AlternatePrice: "0.99",
+		AlternatePrice: "0.00",
 	}
 
-	fmt.Println("Fetched")
+	log.Print(fmt.Sprintf("Current price: %s for %s", a.Name, p.Price))
 
 	return &p, nil
 }
