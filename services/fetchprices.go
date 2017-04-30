@@ -52,7 +52,8 @@ func FetchPrices() {
 				panic(err.Error())
 			}
 
-			if currentPriceInt < targetPrice || alternatePriceInt < targetPrice {
+			//if currentPriceInt < targetPrice || alternatePriceInt < targetPrice {
+			if currentPriceInt < targetPrice {
 				sales = append(sales, models.ProductOnSale{
 					Name: product.Name,
 					Url: product.Url,
