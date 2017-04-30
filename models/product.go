@@ -9,13 +9,13 @@ import (
 const ProductTable = "products"
 
 type Product struct {
-	Id int64
-	Name string
-	Url string
-	TargetPrice string
-	CreateDate time.Time
-	Status string
-	Website string
+	Id 		int64		`json:"id,string,omitempty"`
+	Name 		string		`json:"name,omitempty"`
+	Url 		string		`json:"url,omitempty"`
+	TargetPrice 	string		`json:"target_price,omitempty"`
+	CreateDate 	time.Time	`json:"create_date,string,omitempty"`
+	Status 		string		`json:"status,omitempty"`
+	Website 	string		`json:"website,omitempty"`
 }
 
 func (p Product) FindByStatus(status string) ([]*Product, error) {
@@ -48,7 +48,8 @@ func (p Product) Save() (*Product, error) {
 	if p.Id == 0 {
 		p.CreateDate = time.Now()
 		p.CreateDate.Format(time.RFC3339)
-		sql = fmt.Sprintf("INSERT INTO %s (`name`, `url`, `target_price`, `create_date`, `status`, `website` VALUES (?,?,?,?,?,?)", ProductTable)
+		p.Status = "ACTIVE"
+		sql = fmt.Sprintf("INSERT INTO %s (`name`, `url`, `target_price`, `create_date`, `status`, `website`) VALUES (?,?,?,?,?,?)", ProductTable)
 	} else {
 		sql = fmt.Sprintf("UPDATE %s SET `name`=?, `url`=?, `target_price`=?, `create_date`=?, `status`=?, `website`=? WHERE `id`=%d", ProductTable, p.Id)
 	}
