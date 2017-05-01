@@ -68,3 +68,29 @@ func (p Product) Save() (*Product, error) {
 
 	return &p, nil
 }
+
+func (p Product) FindByProductId(id int64) (*[]Product, error) {
+	if id == 0 {
+		return nil, errors.New("Please provide an id")
+	}
+
+	sql := fmt.Sprintf("select `id`, `name`, `url`, `target_price`, `create_date`, `status`, `website` from %s where `id`=?", ProductTable)
+	rows, err := db.Query(sql, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []Product
+	for rows.Next() {
+		p := new(Product)
+		err := rows.Scan(&p.Id, &p.Name, &p.Url, &p.TargetPrice, &p.CreateDate, &p.Status, &p.Website)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, *p)
+	}
+
+	return &products, nil
+}
+

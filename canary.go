@@ -29,6 +29,7 @@ func main() {
 	router := vestigo.NewRouter()
 
 	router.Post("/products", routes.AddProduct)
+	router.Put("/products/:id", routes.EditProduct)
 	router.Get("/products", routes.GetProducts)
 	router.Get("/pricehistory/:id", routes.GetPriceHistory)
 
