@@ -18,3 +18,8 @@ create table `price_history` (
   `seller` VARCHAR(256) NOT NULL,
   `create_date` TIMESTAMP NOT NULL
 );
+
+create table `executions` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `create_date` TIMESTAMP NOT NULL
+)

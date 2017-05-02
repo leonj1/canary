@@ -20,6 +20,12 @@ func FetchPrices() {
 		panic(err.Error())
 	}
 
+	var execution models.Execution
+	_, err = execution.Save()
+	if err != nil {
+		panic(err.Error())
+	}
+
 	var sales []models.ProductOnSale
 
 	for _, product := range products {
