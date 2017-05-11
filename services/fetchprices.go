@@ -34,7 +34,7 @@ func FetchPrices() {
 			a := Amazon{Name: product.Name}
 			currentPrice, err := a.Fetch(product.Url)
 			if err != nil {
-				panic(err.Error())
+				continue
 			}
 
 			priceHistory := new(models.PriceHistory)
@@ -44,17 +44,17 @@ func FetchPrices() {
 
 			ph, err := priceHistory.Save()
 			if err != nil {
-				panic(err.Error())
+				continue
 			}
 
 			targetPrice, err := strconv.ParseFloat(product.TargetPrice, 64)
 			if err != nil {
-				panic(err.Error())
+				continue
 			}
 
 			currentPriceInt, err := strconv.ParseFloat(ph.Price, 64)
 			if err != nil {
-				panic(err.Error())
+				continue
 			}
 			//alternatePriceInt, err := strconv.ParseFloat(ph.AlternatePrice, 64)
 			//if err != nil {

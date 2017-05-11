@@ -24,11 +24,11 @@ func (a Amazon) Fetch(url string) (*models.CurrentPrice, error) {
 	// TODO implement getting the price for the Product here
 	resp, err := http.Get(url)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	root, err := html.Parse(resp.Body)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	// Get the current Price
