@@ -12,6 +12,7 @@ Sample startup script
 ```
 #!/bin/bash
 
+# I'm not a fan of these env vars, but package "go-ses" depends on them
 export AWS_ACCESS_KEY_ID=[your_key]
 export AWS_SECRET_KEY=[your_secret]
 export AWS_SES_ENDPOINT=https://email.us-east-1.amazonaws.com
