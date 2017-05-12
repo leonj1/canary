@@ -28,6 +28,7 @@ func FetchPrices(envelope models.Envelope) {
 
 	var sales []models.ProductOnSale
 
+	// Add to case statement when we have a need to track Products on other e-commerce sites
 	for _, product := range products {
 		switch website := product.Website; website {
 		case "amazon":
@@ -56,6 +57,7 @@ func FetchPrices(envelope models.Envelope) {
 			if err != nil {
 				continue
 			}
+			// TODO This is commented out until we find a reliable way to get prices from other vendors in Product page
 			//alternatePriceInt, err := strconv.ParseFloat(ph.AlternatePrice, 64)
 			//if err != nil {
 			//	panic(err.Error())

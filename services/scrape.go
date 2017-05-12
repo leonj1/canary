@@ -1,5 +1,7 @@
 package services
 
+// Not my code. Grabbed it form somewhere I can not recall at the moment
+
 import (
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"

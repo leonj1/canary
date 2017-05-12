@@ -45,6 +45,7 @@ func (a Amazon) Fetch(url string) (*models.CurrentPrice, error) {
 		price = price[1:]
 	}
 
+	// TODO Find a reliable way to get prices from other vendors in Amazon's product page
 	// Get the lowest price from other vendors
 	//moreBuyingChoices_feature_div, ok := Find(root, ById("moreBuyingChoices_feature_div"))
 	//if !ok {
