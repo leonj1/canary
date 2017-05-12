@@ -15,7 +15,6 @@ import (
 
 func main() {
 
-	//var delay = flag.Int("delay", 5, "interval check between product fetches in seconds")
 	var userName = flag.String("user", "", "Database username")
 	var password = flag.String("pass", "", "Database password")
 	var databaseHost = flag.String("dbHost", "", "Database host")
