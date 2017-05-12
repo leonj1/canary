@@ -16,14 +16,19 @@ import (
 func main() {
 
 	//var delay = flag.Int("delay", 5, "interval check between product fetches in seconds")
-	var userName = flag.String("user", "", "db username")
-	var password = flag.String("pass", "", "db password")
-	var databaseName = flag.String("db", "", "db name")
-	var serverPort = flag.String("port", "", "server port")
+	var userName = flag.String("user", "", "Database username")
+	var password = flag.String("pass", "", "Database password")
+	var databaseHost = flag.String("dbHost", "", "Database host")
+	var databaseName = flag.String("db", "", "Database name")
+	var databasePort = flag.Int("dbPort", 3306, "Database port")
+	var serverPort = flag.String("port", "", "Web Server port")
+	var emailTo = flag.String("emailTo", "", "To Email Address")
+	var emailFrom = flag.String("emailFrom", "", "From Email Address")
+	var emailSubject = flag.String("emailSubject", "", "Email Subject")
 	flag.Parse()
 
 	// open connection to db
-	connectionString := fmt.Sprintf("%s:%s@/%s?parseTime=true", *userName, *password, *databaseName)
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true", *userName, *password, *databaseHost, *databasePort, *databaseName)
 	models.InitDB(connectionString)
 
 	router := vestigo.NewRouter()
@@ -34,10 +39,16 @@ func main() {
 	router.Get("/pricehistory/:id", routes.GetPriceHistory)
 	router.Get("/executions", routes.GetExecutions)
 
+	envelope := models.Envelope{
+		To: *emailTo,
+		From: *emailFrom,
+		Subject: *emailSubject,
+	}
+
 	// Fetch prices in a background thread
 	s := func() {
 		for {
-			services.FetchPrices()
+			services.FetchPrices(envelope)
 			time.Sleep(time.Hour * 1)
 		}
 	}

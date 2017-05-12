@@ -12,7 +12,7 @@ import (
 
 const ACTIVE = "ACTIVE"
 
-func FetchPrices() {
+func FetchPrices(envelope models.Envelope) {
 
 	var p models.Product
 	products, err := p.FindByStatus(ACTIVE)
@@ -73,19 +73,19 @@ func FetchPrices() {
 	}
 
 	if len(sales) > 0 {
-		_ = sendAlert(sales)
+		_ = sendAlert(envelope, sales)
 	}
 }
 
 // privates
 
-func sendAlert(products []models.ProductOnSale) (error) {
+func sendAlert(envelope models.Envelope, products []models.ProductOnSale) (error) {
 	log.Printf("%d number of sales found", len(products))
 
 	// Change the From address to a sender address that is verified in your Amazon SES account.
-	from := "leonj1@gmail.com"
-	to := "leonj1@gmail.com"
-	subject := "3Camels"
+	from := envelope.From
+	to := envelope.To
+	subject := envelope.Subject
 
 	var contents bytes.Buffer
 	for _, p := range products {

@@ -9,13 +9,13 @@ import (
 func GetExecutions(w http.ResponseWriter, r *http.Request) {
 	var m models.Execution
 
-	models, err := m.FindAll()
+	executions, err := m.FindAll()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	js, err := json.Marshal(&models)
+	js, err := json.Marshal(&executions)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
