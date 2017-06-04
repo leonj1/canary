@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func GetPriceHistory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func GetUniquePriceHistory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var ph models.PriceHistory
 
 	id := ps.ByName("id")
@@ -23,7 +23,7 @@ func GetPriceHistory(w http.ResponseWriter, r *http.Request, ps httprouter.Param
 		return
 	}
 
-	pricehistory, err := ph.FindByProductId(productId)
+	pricehistory, err := ph.GetUniquePrices(productId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

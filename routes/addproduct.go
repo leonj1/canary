@@ -3,13 +3,14 @@ package routes
 import (
 	"canary/models"
 	"encoding/json"
+	"github.com/julienschmidt/httprouter"
 	"net/http"
 )
 
 const ContentType = "Content-Type"
 const JSON = "application/json"
 
-func AddProduct(w http.ResponseWriter, r *http.Request) {
+func AddProduct(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var product models.Product
 	if r.Body == nil {
 		http.Error(w, "Please send a request body", http.StatusBadRequest)

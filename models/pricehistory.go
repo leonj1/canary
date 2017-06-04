@@ -66,3 +66,53 @@ func (p PriceHistory) FindByProductId(id int64) (*[]PriceHistory, error) {
 
 	return &priceHistories, nil
 }
+
+func (p PriceHistory) FindLatestByProductId(id int64) (*PriceHistory, error) {
+	if id == 0 {
+		return nil, errors.New("Please provide an id")
+	}
+
+	sql := fmt.Sprintf("select `price` from %s where `product_id`=? order by create_date desc limit 1", PriceHistoryTable)
+	rows, err := db.Query(sql, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var priceHistory PriceHistory
+	for rows.Next() {
+		p := new(PriceHistory)
+		err := rows.Scan(&p.Price)
+		if err != nil {
+			return nil, err
+		}
+		priceHistory = *p
+	}
+
+	return &priceHistory, nil
+}
+
+func (p PriceHistory) GetUniquePrices(id int64) (*[]PriceHistory, error) {
+	if id == 0 {
+		return nil, errors.New("Pleae provide an id")
+	}
+
+	sql := fmt.Sprintf("select `product_id`, `price`, `create_date` from %s where `product_id`=? group by `price`", PriceHistoryTable)
+	rows, err := db.Query(sql, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var priceHistories []PriceHistory
+	for rows.Next() {
+		p := new(PriceHistory)
+		err := rows.Scan(&p.ProductId, &p.Price, &p.CreateDate)
+		if err != nil {
+			return nil, err
+		}
+		priceHistories = append(priceHistories, *p)
+	}
+
+	return &priceHistories, nil
+}

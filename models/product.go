@@ -13,6 +13,7 @@ type Product struct {
 	Name 		string		`json:"name,omitempty"`
 	Url 		string		`json:"url,omitempty"`
 	TargetPrice 	string		`json:"target_price,omitempty"`
+	CurrentPrice 	string		`json:"current_price,omitempty"`
 	CreateDate 	time.Time	`json:"create_date,string,omitempty"`
 	Status 		string		`json:"status,omitempty"`
 	Website 	string		`json:"website,omitempty"`

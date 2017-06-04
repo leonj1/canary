@@ -7,16 +7,16 @@ import (
 	"net/http"
 )
 
-func GetExecutions(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func GetLatestExecutions(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var m models.Execution
 
-	executions, err := m.FindAll()
+	execution, err := m.FindLatest()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	js, err := json.Marshal(&executions)
+	js, err := json.Marshal(&execution)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -8,6 +8,8 @@ import (
 	"github.com/sourcegraph/go-ses"
 	"log"
 	"strconv"
+	"strings"
+	"time"
 )
 
 const ACTIVE = "ACTIVE"
@@ -30,11 +32,12 @@ func FetchPrices(envelope models.Envelope) {
 
 	// Add to case statement when we have a need to track Products on other e-commerce sites
 	for _, product := range products {
-		switch website := product.Website; website {
+		switch website := strings.ToLower(product.Website); website {
 		case "amazon":
 			a := Amazon{Name: product.Name}
 			currentPrice, err := a.Fetch(product.Url)
 			if err != nil {
+				log.Printf("Problem fetching price for %s. %v", product.Name, err)
 				continue
 			}
 
@@ -72,6 +75,8 @@ func FetchPrices(envelope models.Envelope) {
 				})
 			}
 		}
+		log.Print("Sleeping for 7 seconds in between page checks")
+		time.Sleep(time.Second * 7)
 	}
 
 	if len(sales) > 0 {
