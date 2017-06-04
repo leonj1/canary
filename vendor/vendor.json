@@ -1,6 +1,43 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [],
+	"package": [
+		{
+			"checksumSHA1": "BIY45G2IVrTttD4Rlk9tHwiIOCM=",
+			"path": "github.com/go-sql-driver/mysql",
+			"revision": "3654d25ec346ee8ce71a68431025458d52a38ac0",
+			"revisionTime": "2016-06-02T00:10:21Z"
+		},
+		{
+			"checksumSHA1": "iFIBwWb1xkfcoifXQqCThnKYRGY=",
+			"path": "github.com/husobee/vestigo",
+			"revision": "23d011ed4e5ec0f73678c48df5ca8b7ace92f8d0",
+			"revisionTime": "2017-04-04T11:34:11Z"
+		},
+		{
+			"checksumSHA1": "oOOoWMOCyOoZ594DKzopz9w9kew=",
+			"path": "github.com/kataras/go-errors",
+			"revision": "0f977b82cc78d5d31bb75fb6f903ad9e852c8bbd",
+			"revisionTime": "2016-09-18T10:12:19Z"
+		},
+		{
+			"checksumSHA1": "IgV+nP33TVGLHAMes3git2Cywvg=",
+			"path": "github.com/sourcegraph/go-ses",
+			"revision": "6bd8d17cf7c125859a7211ae8f44126af826104b",
+			"revisionTime": "2016-04-05T16:09:39Z"
+		},
+		{
+			"checksumSHA1": "vqc3a+oTUGX8PmD0TS+qQ7gmN8I=",
+			"path": "golang.org/x/net/html",
+			"revision": "60c41d1de8da134c05b7b40154a9a82bf5b7edb9",
+			"revisionTime": "2017-01-10T03:16:11Z"
+		},
+		{
+			"checksumSHA1": "00eQaGynDYrv3tL+C7l9xH0IDZg=",
+			"path": "golang.org/x/net/html/atom",
+			"revision": "60c41d1de8da134c05b7b40154a9a82bf5b7edb9",
+			"revisionTime": "2017-01-10T03:16:11Z"
+		}
+	],
 	"rootPath": "canary"
 }
