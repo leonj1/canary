@@ -32,11 +32,11 @@ func main() {
 
 	router := vestigo.NewRouter()
 
-	router.Post("/products", routes.AddProduct)
-	router.Put("/products/:id", routes.EditProduct)
-	router.Get("/products", routes.GetProducts)
-	router.Get("/pricehistory/:id", routes.GetPriceHistory)
-	router.Get("/executions", routes.GetExecutions)
+	router.Post("/public/products", routes.AddProduct)
+	router.Put("/public/products/:id", routes.EditProduct)
+	router.Get("/public/products", routes.GetProducts)
+	router.Get("/public/pricehistory/:id", routes.GetPriceHistory)
+	router.Get("/public/executions", routes.GetExecutions)
 
 	envelope := models.Envelope{
 		To: *emailTo,
