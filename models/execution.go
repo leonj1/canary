@@ -12,6 +12,27 @@ type Execution struct {
 	CreateDate 	time.Time	`json:"create_date,string,omitempty"`
 }
 
+func (e Execution) FindLatest() (*Execution, error) {
+	sql := fmt.Sprintf("select `create_date` from %s order by create_date desc limit 1", ExecutionTable)
+	rows, err := db.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var execution Execution
+	for rows.Next() {
+		e := new(Execution)
+		err := rows.Scan(&e.CreateDate)
+		if err != nil {
+			return nil, err
+		}
+		execution = *e
+	}
+
+	return &execution, nil
+}
+
 func (p *Execution) Save() (*Execution, error) {
 	var sql string
 	if p.Id == 0 {

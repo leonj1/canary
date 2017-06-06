@@ -3,15 +3,15 @@ package routes
 import (
 	"canary/models"
 	"encoding/json"
-	"github.com/husobee/vestigo"
+	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"strconv"
 )
 
-func EditProduct(w http.ResponseWriter, r *http.Request) {
+func EditProduct(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	var product models.Product
 
-	id := vestigo.Param(r, "id")
+	id := ps.ByName("id")
 	if id == "" {
 		http.Error(w, "Invalid id", http.StatusBadRequest)
 		return

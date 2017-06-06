@@ -7,7 +7,7 @@ import (
 	"flag"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/husobee/vestigo"
+	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"time"
@@ -30,13 +30,15 @@ func main() {
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true", *userName, *password, *databaseHost, *databasePort, *databaseName)
 	models.InitDB(connectionString)
 
-	router := vestigo.NewRouter()
+	router := httprouter.New()
 
-	router.Post("/public/products", routes.AddProduct)
-	router.Put("/public/products/:id", routes.EditProduct)
-	router.Get("/public/products", routes.GetProducts)
-	router.Get("/public/pricehistory/:id", routes.GetPriceHistory)
-	router.Get("/public/executions", routes.GetExecutions)
+	router.POST("/public/products", routes.AddProduct)
+	router.PUT("/public/products/:id", routes.EditProduct)
+	router.GET("/public/products", routes.GetProducts)
+	router.GET("/public/pricehistory/:id", routes.GetPriceHistory)
+	router.GET("/public/pricehistory/:id/unique", routes.GetUniquePriceHistory)
+	router.GET("/public/executions", routes.GetExecutions)
+	router.GET("/public/executions/latest", routes.GetLatestExecutions)
 
 	envelope := models.Envelope{
 		To: *emailTo,
@@ -48,6 +50,7 @@ func main() {
 	s := func() {
 		for {
 			services.FetchPrices(envelope)
+			log.Print("Done Fetching prices for products")
 			time.Sleep(time.Hour * 1)
 		}
 	}
